@@ -1,2 +1,2 @@
-# betsearch
-Bitsler Bet Search
+# Bitsler Bet Search
+Temporary bet search for bitsler.com
