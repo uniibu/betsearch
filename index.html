@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Bitsler Bet Search</title>
+  <style>
+  p{
+    font-weight:  bold;
+  }
+  p span{
+    font-weight:  normal;
+  }
+
+  </style>
+  </head>
+  <body>
+   <p>Status: <span id="status"></span></p>
+  <p>Game: <span id="game"></span></p>
+  <p>Username: <span id="username"></span></p>
+   <p>Bet Id: <span id="betid"></span></p>
+   <p>Bet Date: <span id="betdate"></span></p>
+      <p>Bet Amount: <span id="betamt"></span></p>
+         <p>Bet Chance: <span id="betchance"></span></p>
+          <p>Bet Currency: <span id="betcoin"></span></p>
+           <p>Bet Payout: <span id="betpay"></span></p>
+            <p>Bet Target: <span id="bettarget"></span></p>
+            <p>Bet Profit: <span id="betprofit"></span></p>
+             <p>Bet Result: <span id="betrslt"></span> - <span id="losewin"> </span></p>
+              
+  </body>
+  <script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+  <script>
+  $(document).ready(function(){
+   
+  var    href   = window.location.href;
+     var   split_results = href.split('/');
+       var target = split_results[split_results.length-1].split('.')[0];
+
+      $.ajax({
+    type: "POST",
+    url: "http://static.bitsler.com/api/v2_check-bet.php",
+    data: {     
+      "id"      : target      
+    },
+    success: function(text) {
+      var val = JSON.parse(text);  
+      val = val.return;
+      if(val.success == "true"){
+       
+       $('#betid').text(val.id);
+        $('#betdate').text(val.date_bet);
+       $('#betamt').text(val.amount);
+       $('#betchance').text(val.chance);
+       $('#betcoin').text(val.devise);
+       $('#betpay').text(val.payout);
+       $('#bettarget').text(val.target);
+       $('#betprofit').text((val.profit).toFixed(8));
+       $('#betrslt').text(val.roll_number);
+       $('#game').text(val.type);
+       $('#username').text(val.username);
+       $('#status').text(val.success);
+        if(val.profit < 0 ){
+           $('#losewin').text('LOSE');
+        }else{
+          $('#losewin').text('WIN');
+        }
+        }else{
+         
+           $('#status').text(val.value);
+        }
+      }
+    })
+   });
+  </script>
+</html>
